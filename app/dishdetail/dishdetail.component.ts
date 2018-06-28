@@ -128,7 +128,7 @@ export class DishdetailComponent implements OnInit {
   }
 
   onSwipe(args: SwipeGestureEventData) {
-
+    console.log(args.direction);
     if (this.dish) {
       this.cardImage = <View>this.page.getViewById<View>("cardImage");
       this.cardLayout = <View>this.page.getViewById<View>("cardLayout");
