@@ -1,12 +1,19 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, ChangeDetectorRef, ViewContainerRef } from '@angular/core';
 import { Dish } from '../shared/dish';
 import { Comment } from '../shared/comment';
+import { CommentComponent } from '../comment/comment.component';
+
 import { DishService } from '../services/dish.service';
 import { FavoriteService } from '../services/favorite.service';
 import { TNSFontIconService } from 'nativescript-ngx-fonticon';
 
 import { ActivatedRoute, Params } from '@angular/router';
 import { RouterExtensions } from 'nativescript-angular/router';
+
+import { ModalDialogService, ModalDialogOptions } from "nativescript-angular/modal-dialog";
+
+import { action } from "ui/dialogs";
+
 import { Toasty } from 'nativescript-toasty';
 import 'rxjs/add/operator/switchMap';
 
@@ -32,6 +39,8 @@ export class DishdetailComponent implements OnInit {
     private fonticon: TNSFontIconService,
     private route: ActivatedRoute,
     private routerExtensions: RouterExtensions,
+    private modalService: ModalDialogService,
+    private vcRef: ViewContainerRef,
     @Inject('BaseURL') private BaseURL) { }
 
   ngOnInit() {
@@ -61,5 +70,46 @@ export class DishdetailComponent implements OnInit {
 
   goBack(): void {
     this.routerExtensions.back();
+  }
+
+  showDialog(): void {
+    //console.log('showDialog()')
+    let options = {
+      title: "Actions",
+      message: "Choose your option",
+      cancelButtonText: "Cancel",
+      actions: ["Add to Favorites", "Add Comment"]
+    };
+
+    action(options).then((result) => {
+      //console.log(result);
+
+      if (result === "Add to Favorites") {
+        this.addToFavorites();
+      } else if (result === "Add Comment") {
+        this.showModal();
+      }
+    });
+  }
+
+  showModal(): void {
+    let options: ModalDialogOptions = {
+        viewContainerRef: this.vcRef,
+        context: 'Comment',
+        fullscreen: false
+    };
+
+    this.modalService.showModal(CommentComponent, options)
+      .then((comment: Comment) => {
+        //console.log(comment);
+        this.dish.comments.push(comment);
+        //console.log(this.dish.comments);
+
+        this.numcomments = this.dish.comments.length;
+
+        let total = 0;
+        this.dish.comments.forEach(comment => total += comment.rating);
+        this.avgstars = (total/this.numcomments).toFixed(2);
+    });
   }
 }

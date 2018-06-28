@@ -18,7 +18,7 @@ export class ReservationComponent extends DrawerPage implements OnInit {
   constructor(
     private changeDetectorRef: ChangeDetectorRef,
     private formBuilder: FormBuilder,
-    private modalService: ModalDialogService, 
+    private modalService: ModalDialogService,
     private vcRef: ViewContainerRef) {
       super(changeDetectorRef);
 
@@ -69,12 +69,12 @@ export class ReservationComponent extends DrawerPage implements OnInit {
 
     this.modalService.showModal(ReservationModalComponent, options)
       .then((result: any) => {
-          if (args === "guest") {
-              this.reservation.patchValue({guests: result});
-          }
-          else if (args === "date-time") {
-              this.reservation.patchValue({ dateTime: result});
-          }
+        if (args === "guest") {
+            this.reservation.patchValue({guests: result});
+        }
+        else if (args === "date-time") {
+            this.reservation.patchValue({ dateTime: result});
+        }
     });
   }
 }

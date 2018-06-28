@@ -15,7 +15,7 @@ const routes: Routes = [
     { path: "home", component: HomeComponent },
     { path: "about", component: AboutComponent },
     { path: "menu", component: MenuComponent },
-    { path: 'dishdetail/:id',     component: DishdetailComponent },
+    { path: 'dishdetail/:id', component: DishdetailComponent },
     { path: "contact", component: ContactComponent },
     { path: "favorites", component: FavoritesComponent },
     { path: "reservation", component: ReservationComponent },
